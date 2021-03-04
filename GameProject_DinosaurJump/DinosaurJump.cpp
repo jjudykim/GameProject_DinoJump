@@ -17,7 +17,7 @@ int main()
 		system("cls");
 
 		// 2. Get Input ==================================
-		game.controlDino(Dino, gameContinue);
+  		game.controlDino(Dino, gameContinue);
 
 		// 3. Game Logic ==================================
 		game.printScreen(Dino);
