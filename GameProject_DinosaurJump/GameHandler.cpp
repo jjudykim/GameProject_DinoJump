@@ -31,7 +31,7 @@ GameHandler::GameHandler()
 	speedCounter = 0;
 	fasterPlay = false;
 
-	jumpY = y_base;
+	y = y_base;
 
 }
 
@@ -75,6 +75,13 @@ void GameHandler::initGameField()
 	}
 }
 
+//void createHurdle(vector<GameObject>& Hurdle)
+//{
+//	GameObject temp({ 8, 20 }, "бу");
+//	Hurdle.push_back(temp);
+//
+//}
+
 void GameHandler::backgroundImage()
 {
 
@@ -89,10 +96,8 @@ void GameHandler::controlDino(GameObject& Dino, bool& gameContinue)
 		doJump();
 	}
 	COORD temp = Dino.getLoc();
-	if (direction == 2) temp.Y = -jumpY + Dino.getLoc().Y;
-	else temp.Y = jumpY + Dino.getLoc().Y;
+	temp.Y = y + Dino.getLoc().Y;
 	Dino.setLoc(temp);
-
 
 
 	/*if (GetAsyncKeyState(VK_SPACE))
@@ -116,7 +121,8 @@ void GameHandler::controlDino(GameObject& Dino, bool& gameContinue)
 
 void GameHandler::doJump()
 {
- 	direction = 1;
+	direction = 1;
+	gravity = jump_speed; // gravity = 0.2f;
 }
 
 void GameHandler::jumpProcess()
@@ -125,32 +131,28 @@ void GameHandler::jumpProcess()
 	{
 		case 0:
 		{
-			jump_power = 0.5f;
-			jumpY = y_base;
+			y = y_base;
 		}
-		break;
 
 		case 1: // up
 		{
-			jumpY -= jump_power;
-			jump_power -= gravity;
-			if (jump_power < 0) direction = 2;
-
+			y -= gravity; 
+			/*if (gravity <= 0.0f) direction = 2; */
+			//else 
+			gravity -= jump_accell;
 		}
 		break;
 
-		case 2: // down
-		{
-			jumpY += jump_power;
-			jump_power += gravity;
-			if (jumpY > y_base)
-			{ 
-				jumpY = y_base;
-				direction = 0;
-			}
-			
-		}
-		break;
+		//case 2: // down
+		//{
+		//	y += gravity;
+		//	if (y < y_base)	gravity -= jump_accell;
+		//	else
+		//	{
+		//		y = y_base;
+		//	}	
+		//}
+		//break;
 	}
 
 }
@@ -183,13 +185,6 @@ void GameHandler::printScreen(GameObject& Dino)
 			cout.width(6);
 			cout.fill('0');
 			cout << scoreNum;
-
-			SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { 2, 20 });
-			cout << "jump_power " << jump_power;
-			SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { 2, 21 });
-			cout << "y : " << jumpY;
-			SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { 2, 22 });
-			cout << "direction : " << direction;
 		}
 	}
 }
@@ -207,7 +202,7 @@ void GameHandler::gameLogic()
 
 void GameHandler::gameTiming()
 {
-	Sleep(500); // Game tick
+	Sleep(10); // Game tick
 	speedCounter++;
 	fasterPlay = (speedCounter >= speed);
 }
