@@ -31,7 +31,7 @@ GameHandler::GameHandler()
 	speedCounter = 0;
 	fasterPlay = false;
 
-	y = y_base;
+	/*y = y_base;*/
 
 }
 
@@ -96,33 +96,13 @@ void GameHandler::controlDino(GameObject& Dino, bool& gameContinue)
 		doJump();
 	}
 	COORD temp = Dino.getLoc();
-	temp.Y = y + Dino.getLoc().Y;
+	temp.Y = jumpY + Dino.getLoc().Y;
 	Dino.setLoc(temp);
-
-
-	/*if (GetAsyncKeyState(VK_SPACE))
-	{
-		JumpHeight = JumpTime * JumpTime - JumpPower * JumpTime;
-
-		JumpTime += 0.05f;
-
-		if (JumpTime >= JumpPower)
-		{
-			JumpTime = 0.f;
-			JumpHeight = 0.f;
-		}
-	}*/
 }
-
-// ====================== 점프 내일 다시 하자.... ===========================
-// https://m.blog.naver.com/push1104/220861525013
-// 참조해서 물리엔진 다시 구현해보기
-// =========================================================================
 
 void GameHandler::doJump()
 {
 	direction = 1;
-	gravity = jump_speed; // gravity = 0.2f;
 }
 
 void GameHandler::jumpProcess()
@@ -131,28 +111,28 @@ void GameHandler::jumpProcess()
 	{
 		case 0:
 		{
-			y = y_base;
-		}
-
-		case 1: // up
-		{
-			y -= gravity; 
-			/*if (gravity <= 0.0f) direction = 2; */
-			//else 
-			gravity -= jump_accell;
+			jumpPower = 0.6f;
+			jumpY = y_base;
 		}
 		break;
 
-		//case 2: // down
-		//{
-		//	y += gravity;
-		//	if (y < y_base)	gravity -= jump_accell;
-		//	else
-		//	{
-		//		y = y_base;
-		//	}	
-		//}
-		//break;
+		case 1: // up
+		{
+			jumpY = y_base;
+			jumpY -= jumpPower; 
+			if (jumpPower <= 0.0f) direction = 2;
+			else 
+			jumpPower -= gravity;
+		}
+		break;
+
+		case 2: // down
+		{
+			jumpY += jumpPower;
+			jumpPower += gravity;
+			if (jumpPower > 0.7f) direction = 0;
+		}
+		break;
 	}
 
 }
@@ -185,6 +165,15 @@ void GameHandler::printScreen(GameObject& Dino)
 			cout.width(6);
 			cout.fill('0');
 			cout << scoreNum;
+
+			SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { 2, 17 });
+			cout << "Dino Y : " << Dino.getLoc().Y;
+			SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { 2, 18 });
+			cout << "jumpY : " << jumpY;
+			SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { 2, 19 });
+			cout << "jumpPower : " << jumpPower;
+			SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { 2, 20 });
+			cout << "gravity : " << gravity;
 		}
 	}
 }
