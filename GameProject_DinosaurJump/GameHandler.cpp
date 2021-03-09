@@ -169,6 +169,8 @@ void GameHandler::printScreen(GameObject& Dino, vector<GameObject>& hurdle)
 
 			//솔루션으로 커밋해볼게요
 
+			//이제는 sln 파일로 커밋해볼게요
+
 			// jump test
 			SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { 2, 17 });
 			cout << "Dino Y : " << Dino.getLoc().Y;
