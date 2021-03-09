@@ -167,6 +167,8 @@ void GameHandler::printScreen(GameObject& Dino, vector<GameObject>& hurdle)
 			cout.fill('0');
 			cout << scoreNum;
 
+			//솔루션으로 커밋해볼게요
+
 			// jump test
 			SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), { 2, 17 });
 			cout << "Dino Y : " << Dino.getLoc().Y;
