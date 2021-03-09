@@ -20,11 +20,11 @@ int main()
   		game.controlDino(Dino, gameContinue);
 
 		// 3. Game Logic ==================================
-		game.printScreen(Dino);
+		game.printScreen(Dino, hurdle);
 		if (gameContinue == false) game.beforeGameStart();
 		else
 		{
-			game.gameLogic();
+			game.gameLogic(hurdle);
 		}
 
 

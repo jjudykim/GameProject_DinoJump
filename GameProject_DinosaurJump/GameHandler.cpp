@@ -8,21 +8,21 @@ GameHandler::GameHandler()
 	cur_info.bVisible = false;
 	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cur_info);
 
-	hurdles[0].append("X.X");
-	hurdles[0].append(".XX");
-	hurdles[0].append("XXX");
+	hurdlesImage[0].append("X.X");
+	hurdlesImage[0].append(".XX");
+	hurdlesImage[0].append("XXX");
 
-	hurdles[1].append("X..");
-	hurdles[1].append("X.X");
-	hurdles[1].append("XXX");
+	hurdlesImage[1].append("X..");
+	hurdlesImage[1].append("X.X");
+	hurdlesImage[1].append("XXX");
 
-	hurdles[2].append("...");
-	hurdles[2].append(".XX");
-	hurdles[2].append(".XX");
+	hurdlesImage[2].append("...");
+	hurdlesImage[2].append(".XX");
+	hurdlesImage[2].append(".XX");
 
-	hurdles[3].append(".X.");
-	hurdles[3].append(".X.");
-	hurdles[3].append(".X.");
+	hurdlesImage[3].append(".X.");
+	hurdlesImage[3].append(".X.");
+	hurdlesImage[3].append(".X.");
 
 	currentHurdle = rand() % 4;
 	currentX = feildWidth-3;
@@ -75,13 +75,6 @@ void GameHandler::initGameField()
 	}
 }
 
-//void createHurdle(vector<GameObject>& Hurdle)
-//{
-//	GameObject temp({ 8, 20 }, "бу");
-//	Hurdle.push_back(temp);
-//
-//}
-
 void GameHandler::backgroundImage()
 {
 
@@ -93,16 +86,11 @@ void GameHandler::controlDino(GameObject& Dino, bool& gameContinue)
 	if (GetAsyncKeyState(VK_SPACE))
 	{
 		if (gameContinue == false) gameContinue = true;
-		doJump();
+		direction = 1;
 	}
 	COORD temp = Dino.getLoc();
 	temp.Y = jumpY + Dino.getLoc().Y;
 	Dino.setLoc(temp);
-}
-
-void GameHandler::doJump()
-{
-	direction = 1;
 }
 
 void GameHandler::jumpProcess()
@@ -137,7 +125,7 @@ void GameHandler::jumpProcess()
 
 }
 
-void GameHandler::printScreen(GameObject& Dino)
+void GameHandler::printScreen(GameObject& Dino, vector<GameObject>& hurdle)
 {
 	for (int x = 0; x < feildWidth; x++)
 	{
@@ -153,11 +141,24 @@ void GameHandler::printScreen(GameObject& Dino)
 
 			if (x < 3 && y < 3)
 			{
-				if (hurdles[currentHurdle][x * 3 + y] == 'X')
+				if (hurdlesImage[currentHurdle][x * 3 + y] == 'X')
 				{
-					const COORD hurdlePos = { currentX + x, currentY + y };
-					SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), hurdlePos);
+					const COORD testHurdlePos = { currentX + x, currentY + y };
+					SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), testHurdlePos);
 					cout << "бс";
+				}
+			}
+
+			if (x < 3 && y < 3)
+			{
+				for (auto i : hurdle)
+				{
+					if (i.getImage()[x * 3 + y] == 'X')
+					{
+						const COORD hurdlePos = i.getLoc();
+						SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), hurdlePos);
+						cout << "бс";
+					}
 				}
 			}
 
@@ -178,15 +179,33 @@ void GameHandler::printScreen(GameObject& Dino)
 	}
 }
 
-void GameHandler::gameLogic()
+COORD GameHandler::moveHurdle(int i, vector<GameObject>& hurdle)
 {
+	COORD hurdlePosTemp = hurdle.at(i).getLoc();
+	hurdlePosTemp.X--;
+
+	return hurdlePosTemp;
+}
+
+void GameHandler::gameLogic(vector<GameObject>& hurdle)
+{
+	for (int i = 0; i < hurdle.size(); i++)
+	{
+		hurdle.at(i).setLoc(moveHurdle(i, hurdle));
+	}
 	if (fasterPlay)
 	{
 		speed--;
 		speedCounter = 0;
 	}
+	if (scoreNum / 60 == rand() % 10)
+	{
+		GameObject hurdleTemp({ (SHORT)feildWidth - 3, (SHORT)8 }, hurdlesImage[rand() % 4]);
+		hurdle.push_back(hurdleTemp);
+	}
 	currentX--;
 	scoreNum++;
+	
 }
 
 void GameHandler::gameTiming()

@@ -13,7 +13,7 @@ private:
 
 	int speed; // 게임 스피드, 값이 작을 수록 빠르고 어려움
 	int speedCounter; //Counting game ticks
-	string hurdles[4];
+	string hurdlesImage[4];
 
 	int currentHurdle, currentX, currentY;
 	bool fasterPlay;
@@ -34,11 +34,11 @@ public:
 	void beforeGameStart();
 	void backgroundImage();
 	void controlDino(GameObject& Dino, bool& gameContinue);
-	void doJump();
 	void jumpProcess();
-	void printScreen(GameObject& Dino);
-	void gameLogic();
+	void printScreen(GameObject& Dino, vector<GameObject>& hurdle);
+	COORD moveHurdle(int i, vector<GameObject>& hurdle);
+	void gameLogic(vector<GameObject>& hurdle);
 	void gameTiming();
-	void createHurdle(vector<GameObject>& Hurdle);
+	void createHurdle(vector<GameObject>& hurdle);
 
 };
