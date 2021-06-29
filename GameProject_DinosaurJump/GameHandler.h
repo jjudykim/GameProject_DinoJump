@@ -1,24 +1,30 @@
 #pragma once
 #include"GameObject.h"
+#include"ScreenBuffer.h"
+#include<iomanip>
+#include<ctime>
+#include<cstdlib>
+
 
 class GameHandler
 {
 
 private:
-	const int feildWidth = 80;
-	const int feildHeigth = 13;
+	const int fieldWidth = 80;
+	const int fieldHeigth = 13;
 	const int INIT_SPEED = 20;
 
+	ScreenBuffer screenBuffer;
 	char* gameField = nullptr;
 
 	int speed; // 게임 스피드, 값이 작을 수록 빠르고 어려움
 	int speedCounter; //Counting game ticks
 	string hurdlesImage[4];
 
-	int currentHurdle, currentX, currentY;
+	int currentHurdle;
 	bool fasterPlay;
 	int scoreNum = 0;
-
+	string scoreString = "000000";
 
 	//중력 물리엔진
 	float jumpY = 0.0f;
@@ -36,9 +42,9 @@ public:
 	void controlDino(GameObject& Dino, bool& gameContinue);
 	void jumpProcess();
 	void printScreen(GameObject& Dino, vector<GameObject>& hurdle);
-	COORD moveHurdle(int i, vector<GameObject>& hurdle);
 	void gameLogic(vector<GameObject>& hurdle);
 	void gameTiming();
 	void createHurdle(vector<GameObject>& hurdle);
+	void moveHurdle(vector<GameObject>& hurdle);
 
 };

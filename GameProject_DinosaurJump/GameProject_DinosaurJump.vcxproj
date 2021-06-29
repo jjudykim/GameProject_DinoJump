@@ -142,10 +142,12 @@
     <ClCompile Include="DinosaurJump.cpp" />
     <ClCompile Include="GameHandler.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="ScreenBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameHandler.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="ScreenBuffer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
